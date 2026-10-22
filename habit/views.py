@@ -2,6 +2,7 @@
 from rest_framework import generics
 
 from habit.models import UsefulHabit
+from habit.pagination import MyPagination
 from habit.serializers import UsefulHabitSerializer
 
 
@@ -20,7 +21,7 @@ class HabitList(generics.ListAPIView):
     serializer_class = UsefulHabitSerializer
     queryset = UsefulHabit.objects.all()
     # permission_classes =  [IsAuthenticated]
-    # pagination_class = MyPagination
+    pagination_class = MyPagination
 
 
 class HabitRetrieve(generics.RetrieveAPIView):

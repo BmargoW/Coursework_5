@@ -4,8 +4,6 @@ from rest_framework import serializers
 
 from habit.models import UsefulHabit
 
-
-
 class UsefulHabitSerializer(serializers.ModelSerializer):
 
     class Meta:
