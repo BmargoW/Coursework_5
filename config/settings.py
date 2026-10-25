@@ -46,6 +46,9 @@ INSTALLED_APPS = [
     "rest_framework",
     "users",
     "habit",
+    "rest_framework_simplejwt",
+    "drf_spectacular",
+    "corsheaders"
 ]
 
 MIDDLEWARE = [
@@ -56,6 +59,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
+
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -136,7 +141,26 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
 
+REST_FRAMEWORK = {
+    # 'DEFAULT_FILTER_BACKENDS': (
+    #     'django_filters.rest_framework.DjangoFilterBackend',
+    #
+    # ),
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.AllowAny',
+    #
+    # ),
 
+   'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+}
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
@@ -148,3 +172,13 @@ MAILERS = {
 }
 
 AUTH_USER_MODEL = 'users.User'
+
+
+CORS_ALLOWED_ORIGINS = [
+    "https://read-only.example.com",
+    "https://read-and-write.example.com",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://read-and-write.example.com",
+]
