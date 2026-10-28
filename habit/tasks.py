@@ -2,14 +2,13 @@ import os
 
 import requests
 from django.utils import timezone
-from django.core.mail import send_mail
+
+# from django.core.mail import send_mail
 from celery import shared_task
 from collections import defaultdict
 
 
 from .models import UsefulHabit
-
-
 
 TELEGRAM_URL = "https://api.telegram.org/"
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
@@ -24,6 +23,7 @@ WEEKDAY_MAP = {
     6: "Sunday",
 }
 
+
 @shared_task
 def send_daily_habit():
     now = timezone.now()
@@ -31,13 +31,13 @@ def send_daily_habit():
 
     habits = UsefulHabit.objects.filter(
         carrier__isnull=False,
-    ).select_related('carrier')
+    ).select_related("carrier")
 
     habits_by_user = defaultdict(list)
 
     for habit in habits:
 
-        if habit.periodicity == 'daily':
+        if habit.periodicity == "daily":
             habits_by_user[habit.carrier].append(habit)
             continue
         if not habit.days_of_week:
@@ -53,8 +53,7 @@ def send_daily_habit():
         if not user.tg_chat_id:
             continue  # нет TG — не шлем
 
-
-        subject = "Ваши привычки на сегодня"
+        # subject = "Ваши привычки на сегодня"
         lines = []
         for h in user_habits:
             line = f"- «{h.action}»"
@@ -63,27 +62,25 @@ def send_daily_habit():
             lines.append(line)
         text = "Сегодня запланированы следующие привычки:\n" + "\n".join(lines)
 
-        send_message(
-             text,user.tg_chat_id
-         )
+        send_message(text, user.tg_chat_id)
 
 
 def send_message(text, chat_id):
     """функция отправки уведомления через телеграмм"""
     params = {
-        'text': text,
-        'chat_id': chat_id,
+        "text": text,
+        "chat_id": chat_id,
     }
-    requests.get(f'{TELEGRAM_URL}bot{TELEGRAM_TOKEN}/sendMessage', params=params)
+    requests.get(f"{TELEGRAM_URL}bot{TELEGRAM_TOKEN}/sendMessage", params=params)
     try:
         resp = requests.get(
-            f"{TELEGRAM_URL}bot{TELEGRAM_TOKEN}/sendMessage",
-            params=params,
-            timeout=10
+            f"{TELEGRAM_URL}bot{TELEGRAM_TOKEN}/sendMessage", params=params, timeout=10
         )
         resp.raise_for_status()
     except Exception as e:
         print(e)
+
+
 #
 #     # Отправляем письмо пользователю
 #     for user, user_habits in habits_by_user.items():
@@ -102,14 +99,14 @@ def send_message(text, chat_id):
 #         # send_mail(
 #         #     subject=subject,
 #         #     message=message,
-#         #     from_email=None,  # из DEFAULT_FROM_EMAIL
+#         #     from_email=None,
 #         #     recipient_list=[user.email],
 #         # )
 #
 #         print(message)
 
+
 @shared_task()
 def send_mail_about_hubit():
+    """тестовая функция"""
     print("Hello")
-
-

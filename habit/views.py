@@ -12,7 +12,6 @@ class HabitCreate(generics.CreateAPIView):
     serializer_class = UsefulHabitSerializer
     permission_classes = [IsAuthenticated]
 
-
     def perform_create(self, serializer):
         new_habit = serializer.save()
         new_habit.carrier = self.request.user
@@ -24,7 +23,7 @@ class HabitCreate(generics.CreateAPIView):
 class HabitList(generics.ListAPIView):
     serializer_class = UsefulHabitSerializer
     queryset = UsefulHabit.objects.all()
-    permission_classes =  [PublicOrCarrierPerm]
+    permission_classes = [PublicOrCarrierPerm]
     pagination_class = MyPagination
 
     def get_queryset(self):
@@ -44,10 +43,12 @@ class HabitRetrieve(generics.RetrieveAPIView):
     queryset = UsefulHabit.objects.all()
     permission_classes = [PublicOrCarrierPerm]
 
+
 class HabitUpdate(generics.UpdateAPIView):
     serializer_class = UsefulHabitSerializer
     queryset = UsefulHabit.objects.all()
     permission_classes = [PublicOrCarrierPerm]
+
 
 class HabitDestroy(generics.DestroyAPIView):
     queryset = UsefulHabit.objects.all()

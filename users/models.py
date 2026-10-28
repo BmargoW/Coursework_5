@@ -1,5 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+
 class User(AbstractUser):
-    tg_chat_id = models.CharField (max_length=50, blank=True, null=True, verbose_name="TG чат-id")
+    tg_chat_id = models.CharField(
+        max_length=50, blank=True, null=True, verbose_name="TG чат-id"
+    )
