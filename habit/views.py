@@ -16,6 +16,8 @@ class HabitCreate(generics.CreateAPIView):
     def perform_create(self, serializer):
         new_habit = serializer.save()
         new_habit.carrier = self.request.user
+        if new_habit.periodicity == "daily":
+            new_habit.days_of_week = None
         new_habit.save()
 
 

@@ -31,6 +31,7 @@ class UsefulHabit(models.Model):
     reward = models.CharField(max_length=50, verbose_name="вознаграждение", blank=True)
     duration = models.DurationField(null=True, blank=True)
     publicity = models.BooleanField(default=False, verbose_name="публичность")
+    days_of_week = models.JSONField(default=list, verbose_name="дни недели", blank=True)
 
 
     def __str__(self):
